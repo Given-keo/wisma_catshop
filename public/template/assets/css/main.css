@@ -241,7 +241,7 @@ h6 {
   color: var(--contrast-color);
   font-size: 13px;
   padding: 7px 25px;
-  margin: 0 0 0 30px;
+  margin: 0 0 0 20px;
   border-radius: 4px;
   transition: 0.3s;
   text-transform: uppercase;
