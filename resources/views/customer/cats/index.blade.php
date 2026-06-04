@@ -9,7 +9,7 @@
             <i class="fas fa-plus fa-sm text-white-50"></i> Tambah Kucing Baru
         </a>
     </div>
-
+    
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
@@ -50,7 +50,7 @@
                     </div>
                     
                     <div class="card-footer bg-white border-top d-flex justify-content-between">
-                        <a href="{{ route('customer.cats.edit', $cat->id) }}" class="btn btn-sm btn-outline-info">
+                        <a href="{{ route('customer.cats.edit', $cat->id) }}" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-edit"></i> Edit Profil
                         </a>
                         
