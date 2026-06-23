@@ -45,9 +45,6 @@ class Aside extends Component
                         "route_active" => "admin.data-master.services.*",
                         "route_name" => "admin.data-master.services.index",
                     ],
-
-                   
-
                 ]
             ],
 

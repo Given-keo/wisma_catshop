@@ -249,8 +249,8 @@
 
 <div class="register-container">
     <div class="register-hero">
-        <h2 class="hero-title">Mulai Petualangan Bersama Anabul</h2>
-        <p class="hero-text">Daftar sekarang dan nikmati kemudahan grooming, produk berkualitas, serta layanan khusus untuk kucing kesayangan Anda.</p>
+        <h2 class="hero-title">Temukan Kebahagiaan Kucingmu.</h2>
+        <p class="hero-text">Bergabunglah dengan kami. Kelola pesanan, grooming, dan kebutuhan anabul Anda dalam satu tempat.</p>
     </div>
 
     <!-- Form Kanan -->
