@@ -49,7 +49,7 @@
             <div class="card-body">
                 <x-admin.alert :error="$errors->any()" />
 
-                <form action="{{ route('admin.transaksi.boarding_logs.store', $booking->id) }}" method="POST">
+                <form action="{{ route('admin.transaksi.boarding_logs.store', $booking->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -99,6 +99,17 @@
                         @error('health_notes')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="photo" class="form-label fw-bold">Foto Kucing (Opsional)</label>
+                        <input type="file" name="photo" id="photo" 
+                               class="form-control @error('photo') is-invalid @enderror"
+                               accept="image/jpeg,image/png,image/jpg">
+                        @error('photo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <div class="form-text">Format: JPEG/PNG, maksimal 2MB.</div>
                     </div>
 
                     <div class="mt-4 border-top pt-3 d-flex justify-content-end">

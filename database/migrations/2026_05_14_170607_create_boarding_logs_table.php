@@ -21,10 +21,9 @@ return new class extends Migration
             $table->date('log_date');
             
             // Kondisi harian
-            $table->string('eating_condition'); // Misal: "Makan Lahap", "Makan Sedikit", "Tidak Makan"
-            $table->string('activity');         // Misal: "Aktif Bermain", "Tidur Terus", "Gelisah"
-            
-            // Catatan tambahan jika ada indikasi sakit/lainnya
+            $table->string('eating_condition'); 
+            $table->string('activity');    
+            $table->string('photo_path')->nullable();
             $table->text('health_notes')->nullable(); 
             
             $table->timestamps();

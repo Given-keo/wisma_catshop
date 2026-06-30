@@ -9,7 +9,18 @@ class BoardingLog extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'booking_id',
+        'log_date',
+        'eating_condition',
+        'activity',
+        'photo_path',
+        'health_notes',
+    ];
+
+    protected $casts = [
+        'log_date' => 'date',
+    ];
 
     public function booking()
     {

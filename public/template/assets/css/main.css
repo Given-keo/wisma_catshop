@@ -278,8 +278,19 @@ h6 {
 /* Global Header on Scroll
 ------------------------------*/
 .scrolled .header {
-  --background-color: rgba(21, 34, 43, 0.85);
+  --background-color: rgba(6, 12, 21, 0.817);
 }
+
+.scrolled .header .btn-login:hover {
+  border-color: var(--accent-color);
+  color: white;
+  
+}
+
+/* .header .container-fluid 
+{
+  color: var(--accent-color) !important;
+} */
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -920,7 +931,7 @@ section,
 
 .hero:before {
   content: "";
-  background: color-mix(in srgb, var(--background-color), transparent 30%);
+  background: color-mix(in srgb, var(--background-color), transparent 70%);
   position: absolute;
   inset: 0;
   z-index: 2;

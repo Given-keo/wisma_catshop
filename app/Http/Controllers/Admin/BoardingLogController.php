@@ -12,7 +12,6 @@ class BoardingLogController extends Controller
 {
     public function index()
     {
-    
         $bookings = Booking::with(['user', 'cat', 'service'])
             ->whereHas('service', function ($query) {
                 $query->where('type', 'boarding');
@@ -24,14 +23,12 @@ class BoardingLogController extends Controller
         return view('admin.transaksi.boarding_logs.index', compact('bookings'));
     }
 
-
     public function create($booking_id)
     {
         $booking = Booking::with(['user', 'cat'])->findOrFail($booking_id);
 
         return view('admin.transaksi.boarding_logs.create', compact('booking'));
     }
-
 
     public function store(Request $request, $booking_id)
     {
@@ -40,9 +37,16 @@ class BoardingLogController extends Controller
             'eating_condition' => 'required|string|max:255',
             'activity'         => 'required|string|max:255',
             'health_notes'     => 'nullable|string',
+            'photo'            => 'nullable|image|mimes:jpeg,png,jpg|max:2048', 
         ]);
 
         $booking = Booking::findOrFail($booking_id);
+
+        $photoPath = null;
+
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('boarding_photos', 'public');
+        }
 
         BoardingLog::create([
             'booking_id'       => $booking->id,
@@ -50,6 +54,7 @@ class BoardingLogController extends Controller
             'eating_condition' => $request->eating_condition,
             'activity'         => $request->activity,
             'health_notes'     => $request->health_notes,
+            'photo_path'       => $photoPath, 
         ]);
 
         return redirect()->route('admin.transaksi.boarding_logs.history', $booking->id)
@@ -60,7 +65,6 @@ class BoardingLogController extends Controller
     {
         $booking = Booking::with(['user', 'cat', 'service'])->findOrFail($booking_id);
         
-
         $logs = BoardingLog::where('booking_id', $booking_id)
             ->orderBy('log_date', 'desc')
             ->orderBy('created_at', 'desc')

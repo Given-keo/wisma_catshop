@@ -38,16 +38,22 @@ class BookingController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'total_price' => 'required|numeric|min:0',
-            'down_payment' => 'nullable|numeric|min:0',
             'brought_items' => 'nullable|string',
         ]);
 
         // Generate Booking Code unik WSM-20260517-XYZ12
         $bookingCode = 'WSM-' . date('Ymd') . '-' . strtoupper(Str::random(5));
 
+        // Tentukan down_payment & status berdasarkan tipe layanan
+        $service = Service::findOrFail($request->service_id);
 
-        $status = 'fully_paid'; 
-        if ($request->down_payment > 0 && $request->down_payment < $request->total_price) {
+        if ($service->type === 'grooming') {
+            // Grooming: bayar lunas
+            $downPayment = $request->total_price;
+            $status = 'fully_paid';
+        } else {
+            // Boarding: DP 50%, jika bayar lebih anggap pelunasan
+            $downPayment = $request->total_price * 50 / 100;
             $status = 'dp_paid';
         }
 
@@ -59,7 +65,7 @@ class BookingController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'total_price' => $request->total_price,
-            'down_payment' => $request->down_payment ?? 0,
+            'down_payment' => $downPayment,
             'brought_items' => $request->brought_items,
             'status' => $status,
             'is_walk_in' => true, 

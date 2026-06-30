@@ -67,6 +67,17 @@
                                                 {{ $log->health_notes ?? 'Kucing dalam kondisi sehat, ceria, dan tidak ada keluhan khusus.' }}
                                             </p>
                                         </div>
+                                        @if($log->photo_path)
+                                        <div class="col-12 mt-2">
+                                            <small class="text-muted d-block"><i class="fas fa-camera me-1 text-success"></i> Foto Kucing:</small>
+                                            <a href="{{ asset('storage/' . $log->photo_path) }}" target="_blank">
+                                                <img src="{{ asset('storage/' . $log->photo_path) }}" 
+                                                     alt="Foto Kucing" 
+                                                     style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px;"
+                                                     class="shadow-sm border mt-1">
+                                            </a>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

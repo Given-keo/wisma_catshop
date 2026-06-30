@@ -63,6 +63,7 @@
                                 <th>Kondisi Makan</th>
                                 <th>Aktivitas & Mood</th>
                                 <th>Catatan Kesehatan</th>
+                                <th>Foto</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -110,10 +111,22 @@
                                             <span class="text-muted fst-italic" style="font-size: 0.85em;">Tidak ada catatan</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if($log->photo_path)
+                                            <a href="{{ asset('storage/' . $log->photo_path) }}" target="_blank">
+                                                <img src="{{ asset('storage/' . $log->photo_path) }}" 
+                                                     alt="Foto Kucing" 
+                                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;"
+                                                     class="shadow-sm">
+                                            </a>
+                                        @else
+                                            <span class="text-muted fst-italic" style="font-size: 0.85em;">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-5">
+                                    <td colspan="5" class="text-center py-5">
                                         <div class="text-muted">
                                             <i class="fas fa-clipboard-list fs-2 mb-3 d-block"></i>
                                             Belum ada laporan harian yang dicatat untuk kucing ini.

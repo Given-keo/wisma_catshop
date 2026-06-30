@@ -11,7 +11,7 @@
     <div class="card-body">
         <x-admin.alert :error="$errors->any()" />
 
-        <form action="{{ route('admin.transaksi.bookings.store') }}" method="POST">
+        <form action="{{ route('admin.transaksi.bookings.store') }}" method="POST" id="form-booking">
             @csrf
 
             <div class="row">
@@ -84,18 +84,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="total_price" class="form-label fw-bold">Total Harga (Rp) <span class="text-danger">*</span></label>
+                        <label for="total_price" class="form-label fw-bold">Total Dibayar (Rp) <span class="text-danger">*</span></label>
                         <input type="number" name="total_price" id="total_price" class="form-control @error('total_price') is-invalid @enderror" value="{{ old('total_price', 0) }}" required min="0">
+                        <small id="payment-info" class="text-muted"></small>
                         @error('total_price')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="down_payment" class="form-label fw-bold">Uang Muka / DP (Rp)</label>
-                        <input type="number" name="down_payment" id="down_payment" class="form-control @error('down_payment') is-invalid @enderror" value="{{ old('down_payment', 0) }}" min="0">
-                        <small class="text-muted">Isi 0 atau samakan dengan total harga jika pelanggan langsung bayar lunas.</small>
-                        @error('down_payment')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -115,6 +107,7 @@
 
 {{-- Menggunakan @push('js') agar script masuk ke bawah jQuery & Select2 di layout --}}
 @push('js')
+<script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
 <script>
     $(document).ready(function () {
         // 1. Inisialisasi Select2
@@ -166,27 +159,73 @@
             $catSelect.trigger('change');
         });
 
-        // 3. Logika Auto-Fill Harga Berdasarkan Layanan yang Dipilih
+        // 3. Logika Auto-Fill, Info Pembayaran & Sembunyikan Tgl Selesai
         $('#service_id').on('change', function () {
-            // Ambil atribut data-price dari option yang sedang dipilih
-            let price = $(this).find(':selected').data('price');
+            let $selected = $(this).find(':selected');
+            let price = $selected.data('price');
+            let serviceText = $selected.text().toLowerCase();
+            let $info = $('#payment-info');
+            let $endDateRow = $('#end_date').closest('.mb-3');
             
             if (price) {
                 $('#total_price').val(Math.round(price));
             } else {
                 $('#total_price').val(0);
             }
+
+            // Tentukan info pembayaran berdasarkan tipe layanan
+            if (serviceText.includes('grooming')) {
+                $info.text('Grooming: bayar lunas (total = yang dibayar).');
+                $endDateRow.hide();
+                $('#end_date').val('');
+            } else if (serviceText.includes('boarding')) {
+                let dp = Math.round(price * 50 / 100);
+                $info.text('Penitipan: DP minimal 50% (Rp ' + dp.toLocaleString('id-ID') + '). Kelebihan dianggap pelunasan.');
+                $endDateRow.show();
+            } else {
+                $info.text('');
+                $endDateRow.show();
+            }
         });
 
-        // Jika ada old('user_id') karena error validasi, trigger otomatis saat halaman dimuat
-        if ($('#user_id').val()) {
-            $('#user_id').trigger('change');
-            // Pilih kembali kucing yang sudah di-select sebelumnya (old value)
+        // Inisialisasi state form jika ada old value karena validasi error
+        let oldUserId = "{{ old('user_id') }}";
+        let oldServiceId = "{{ old('service_id') }}";
+
+        if (oldUserId) {
+            $('#user_id').val(oldUserId).trigger('change');
             let oldCatId = "{{ old('cat_id') }}";
             if(oldCatId) {
                 $('#cat_id').val(oldCatId).trigger('change');
             }
         }
+
+        if (oldServiceId) {
+            $('#service_id').val(oldServiceId).trigger('change');
+        } else {
+            // Sembunyikan end_date jika belum ada layanan dipilih
+            $('#end_date').closest('.mb-3').hide();
+        }
+
+        // 4. Konfirmasi SweetAlert sebelum simpan transaksi
+        $('#form-booking').on('submit', function (e) {
+            e.preventDefault();
+            let form = this;
+            Swal.fire({
+                title: 'Konfirmasi Transaksi',
+                text: 'Pastikan data sudah benar. Simpan transaksi ini?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Simpan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
 @endpush

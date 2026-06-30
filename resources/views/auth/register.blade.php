@@ -249,7 +249,7 @@
 
 <div class="register-container">
     <div class="register-hero">
-        <h2 class="hero-title">Temukan Kebahagiaan Kucingmu.</h2>
+        <h2 class="hero-title">Rawat. Manjakan. Sayangi.</h2>
         <p class="hero-text">Bergabunglah dengan kami. Kelola pesanan, grooming, dan kebutuhan anabul Anda dalam satu tempat.</p>
     </div>
 
