@@ -96,6 +96,8 @@
                                             <span class="text-success fw-semibold">Selesai</span>
                                         @elseif($item->status == 'fully_paid')
                                             <span class="text-primary fw-semibold">Lunas</span>
+                                        @elseif($item->status == 'dp_paid')
+                                            <span class="text-warning fw-semibold">DP Dibayar</span>
                                         @endif
                                     </td>
 
@@ -278,13 +280,15 @@
 @push('js')
 <script>
     $(document).ready(function () {
+        @if($bookings->count() > 0)
         $('#table-laporan').DataTable({
-            sorting: false,
+            ordering: false,
             paging: false,
             info: false,
             searching: false,
             lengthChange: false
         });
+        @endif
     });
 </script>
 @endpush

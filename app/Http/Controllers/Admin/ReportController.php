@@ -17,7 +17,7 @@ class ReportController extends Controller
         $endDate = $request->end_date ?? Carbon::now()->format('Y-m-d');
 
         $bookings = Booking::with(['user', 'service'])
-            ->whereIn('status', ['fully_paid', 'completed'])
+            ->whereIn('status', ['fully_paid', 'completed', 'dp_paid'])
             ->whereBetween('start_date', [$startDate, $endDate])
             ->latest('start_date')
             ->get();
@@ -34,12 +34,12 @@ class ReportController extends Controller
 
         $popularServices = Service::select('services.id', 'services.name', 'services.type', 'services.price')
             ->withCount(['bookings as total_pesanan' => function ($query) use ($startDate, $endDate) {
-                $query->whereIn('status', ['fully_paid', 'completed'])
+                $query->whereIn('status', ['fully_paid', 'completed', 'dp_paid'])
                       ->whereBetween('start_date', [$startDate, $endDate]);
             }])
             
             ->withSum(['bookings as total_pendapatan' => function ($query) use ($startDate, $endDate) {
-                $query->whereIn('status', ['fully_paid', 'completed'])
+                $query->whereIn('status', ['fully_paid', 'completed', 'dp_paid'])
                       ->whereBetween('start_date', [$startDate, $endDate]);
             }], 'total_price')
             ->orderByDesc('total_pesanan')

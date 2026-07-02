@@ -272,13 +272,15 @@
 @push('js')
 <script>
     $(document).ready(function () {
+        @if($popularServices->count() > 0)
         $('#table-layanan').DataTable({
-            sorting: false,
+            ordering: false,
             paging: false,
             info: false,
             searching: false,
             lengthChange: false
         });
+        @endif
     });
 </script>
 @endpush

@@ -126,7 +126,9 @@
 
     <script>
         $(document).ready(function () {
+            if ($('#datatable').length) {
                 $('#datatable').DataTable();
+            }
         });
     </script>
 
